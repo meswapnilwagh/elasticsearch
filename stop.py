@@ -32,8 +32,7 @@ except Exception as e:
 	exit( "We couldn't get user-data or other meta-data...")
 
 if __name__ == '__main__':
-	r53_zone = Route53Zone(userdata['access_key'], userdata['secret_key'],
-							userdata['hosted_zone_id'])
+	r53_zone = Route53Zone(userdata['hosted_zone_id'])
 
 	name = "{0}.{1}".format(userdata['name'], userdata['hosted_zone'].rstrip('.'))
 	identifier = instance_id
