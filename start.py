@@ -38,7 +38,7 @@ if __name__ == '__main__':
 	value = hostname
 	identifier = instance_id
 
-	if True:
+	try:
 		r53_zone.create_record(name, value, identifier, 100)
-	#except:
-	#	r53_zone.update_record(name, value, identifier, 100)
+	except:
+		r53_zone.update_record(name, value, identifier, 100)

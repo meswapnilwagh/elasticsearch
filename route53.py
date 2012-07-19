@@ -22,9 +22,9 @@ from boto.route53.connection import Route53Connection
 from boto.route53.record import ResourceRecordSets
 
 class Route53Zone:
-	def __init__(self, key, access, zone_id):
+	def __init__(self, zone_id):
 		self.zone_id = zone_id
-		self.route53 = Route53Connection(key, access)
+		self.route53 = Route53Connection()
 
 	def create_record(self, name, value, identifier=None, weight=None):
 		changes = ResourceRecordSets(self.route53, self.zone_id)
@@ -69,5 +69,5 @@ class Route53Zone:
 if __name__ == '__main__':
 	# easy testing, use like this (requires environment variables)
 	#	python route53.py create_record key access id name value
-	r53_zone = Route53Zone(sys.argv[2], sys.argv[3], sys.argv[4])
-	print getattr(r53_zone, sys.argv[1])(*sys.argv[5:])
+	r53_zone = Route53Zone(sys.argv[2])
+	print getattr(r53_zone, sys.argv[1])(*sys.argv[3:])
