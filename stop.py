@@ -32,7 +32,9 @@ except Exception as e:
 	exit( "We couldn't get user-data or other meta-data...")
 
 if __name__ == '__main__':
-	r53_zone = Route53Zone(userdata['hosted_zone_id'])
+	key = userdata["iam"]["security-credentials"]["elasticsearch-heystaq-com"]["AccessKeyId"]
+	secret = userdata["iam"]["security-credentials"]["elasticsearch-heystaq-com"]["SecretAccessKey"]
+	r53_zone = Route53Zone(userdata['hosted_zone_id'], key, secret)
 
 	name = "{0}.{1}".format(userdata['name'], userdata['hosted_zone'].rstrip('.'))
 	identifier = instance_id
