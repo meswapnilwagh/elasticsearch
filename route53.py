@@ -16,7 +16,7 @@
 # along with Redis for AWS. If not, see <http://www.gnu.org/licenses/>.
 
 import os, sys
-import json, urllib2
+import json
 
 from boto.route53.connection import Route53Connection
 from boto.route53.record import ResourceRecordSets

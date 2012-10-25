@@ -18,18 +18,13 @@
 import os, sys
 import json, urllib2
 
+import boto.utils
 from boto.ec2.regioninfo import RegionInfo
 
 from route53 import Route53Zone
 
-try:
-	url = "http://169.254.169.254/latest/"
-
-	userdata = json.load(urllib2.urlopen(url + "user-data"))
-	hostname = urllib2.urlopen(url + "meta-data/public-hostname/").read()
-	instance_id = urllib2.urlopen(url + "meta-data/instance-id/").read()
-except Exception as e:
-	exit( "We couldn't get user-data or other meta-data...")
+userdata = boto.utils.get_user_data()
+metadata = boto.utils.get_meta_data()
 
 if __name__ == '__main__':
 	key = userdata["iam"]["security-credentials"]["elasticsearch-heystaq-com"]["AccessKeyId"]
@@ -37,8 +32,8 @@ if __name__ == '__main__':
 	r53_zone = Route53Zone(userdata['hosted_zone_id'], key, secret)
 
 	name = "{0}.{1}".format(userdata['name'], userdata['hosted_zone'].rstrip('.'))
-	value = hostname
-	identifier = instance_id
+	value = metadata['public-hostname']
+	identifier = metadata['hostname']
 
 	try:
 		r53_zone.create_record(name, value, identifier, 100)
