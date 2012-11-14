@@ -23,7 +23,7 @@ from boto.ec2.regioninfo import RegionInfo
 
 from route53 import Route53Zone
 
-userdata = boto.utils.get_instance_userdata()
+userdata = json.loads(boto.utils.get_instance_userdata())
 metadata = boto.utils.get_instance_metadata()
 
 if __name__ == '__main__':

@@ -18,18 +18,16 @@
 import os, sys
 import json, urllib2
 
+import boto.utils
 from boto.ec2.regioninfo import RegionInfo
 
 from route53 import Route53Zone
 
-try:
-	url = "http://169.254.169.254/latest/"
+userdata = json.loads(boto.utils.get_instance_userdata())
+metadata = boto.utils.get_instance_metadata()
 
-	userdata = json.load(urllib2.urlopen(url + "user-data"))
-	hostname = urllib2.urlopen(url + "meta-data/public-hostname/").read()
-	instance_id = urllib2.urlopen(url + "meta-data/instance-id/").read()
-except Exception as e:
-	exit( "We couldn't get user-data or other meta-data...")
+hostname = metadata["public-hostname"]
+instance_id = metadata["instance-id"]
 
 if __name__ == '__main__':
 	key = userdata["iam"]["security-credentials"]["elasticsearch-heystaq-com"]["AccessKeyId"]
