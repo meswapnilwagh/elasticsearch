@@ -23,8 +23,8 @@ from boto.ec2.regioninfo import RegionInfo
 
 from route53 import Route53Zone
 
-userdata = boto.utils.get_user_data()
-metadata = boto.utils.get_meta_data()
+userdata = boto.utils.get_instance_userdata()
+metadata = boto.utils.get_instance_metadata()
 
 if __name__ == '__main__':
 	key = userdata["iam"]["security-credentials"]["elasticsearch-heystaq-com"]["AccessKeyId"]
