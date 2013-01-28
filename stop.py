@@ -27,7 +27,7 @@ userdata = json.loads(boto.utils.get_instance_userdata())
 metadata = boto.utils.get_instance_metadata()
 
 hostname = metadata["public-hostname"]
-instance_id = metadata["instance-id"]
+identifier = metadata['hostname']
 
 if __name__ == '__main__':
 	key = userdata["iam"]["security-credentials"]["elasticsearch-heystaq-com"]["AccessKeyId"]
@@ -35,6 +35,4 @@ if __name__ == '__main__':
 	r53_zone = Route53Zone(userdata['hosted_zone_id'], key, secret)
 
 	name = "{0}.{1}".format(userdata['name'], userdata['hosted_zone'].rstrip('.'))
-	identifier = instance_id
-
 	r53_zone.delete_record(name, identifier, 100)
