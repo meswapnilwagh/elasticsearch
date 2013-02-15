@@ -30,8 +30,8 @@ hostname = metadata["public-hostname"]
 identifier = metadata['hostname']
 
 if __name__ == '__main__':
-	key = userdata["iam"]["security-credentials"]["elasticsearch-heystaq-com"]["AccessKeyId"]
-	secret = userdata["iam"]["security-credentials"]["elasticsearch-heystaq-com"]["SecretAccessKey"]
+	key = userdata["credentials"]["access_key_id"]
+	secret = userdata["credentials"]["secret_access_key"]
 	r53_zone = Route53Zone(userdata['hosted_zone_id'], key, secret)
 
 	name = "{0}.{1}".format(userdata['name'], userdata['hosted_zone'].rstrip('.'))
