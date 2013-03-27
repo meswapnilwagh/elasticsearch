@@ -24,8 +24,6 @@ ulimit -l unlimited
 ulimit -n 65536
 
 # they advice to use half the memory (need to test)
-# ES_HEAP_SIZE=256m
-#ES_HEAP_SIZE=1922424k
 export ES_MIN_MEM=$(($(/usr/bin/awk '/MemTotal/{print $2}' /proc/meminfo) / 2))k
 export ES_MAX_MEM=$(($(/usr/bin/awk '/MemTotal/{print $2}' /proc/meminfo) / 2))k
 
