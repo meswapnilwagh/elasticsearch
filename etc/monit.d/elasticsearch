@@ -1,0 +1,7 @@
+
+  check process elasticsearch with pidfile /var/run/elasticsearch/elasticsearch.pid
+    start program = "/etc/init.d/elasticsearch start"
+    stop program  = "/etc/init.d/elasticsearch stop"
+    if failed port 9200 with timeout 15 seconds then restart
+    if 2 restarts within 3 cycles then alert
+    group elasticsearch
