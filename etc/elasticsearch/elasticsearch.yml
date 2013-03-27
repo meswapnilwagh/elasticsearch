@@ -1,0 +1,48 @@
+# because we can use environment variables in the .yml, we can
+# configure this thing from userdata. we can set the environment
+# variabeles in /etc/default/elasticsearch.
+
+index:
+    _source:
+        compress: true
+    store:
+        type: mmapfs
+
+node:
+    data: true
+    master: true
+
+cluster:
+    name: ${ES_NAME}
+
+network.publish_host: _ec2:publicDns_
+
+bootstrap:
+    mlockall: true
+
+cloud:
+    aws:
+        access_key: ${ES_ACCESS_KEY}
+        secret_key: ${ES_SECRET_KEY}
+        region: ${ES_REGION}
+
+metrics:
+    cloudwatch:
+        enabled: true
+        aws:
+            access_key: ${ES_ACCESS_KEY}
+            secret_key: ${ES_SECRET_KEY}
+            region: eu-west-1
+        frequency: 1m
+        index_stats_enabled: false
+
+discovery:
+    type: ec2
+    ec2:
+       groups: ${ES_GROUPS}
+       host_type: public_dns
+
+gateway:
+    type: s3
+    s3:
+        bucket: ${ES_BUCKET}

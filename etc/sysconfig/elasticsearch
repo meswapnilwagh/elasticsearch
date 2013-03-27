@@ -1,0 +1,37 @@
+ES_PATH_LOG=/var/log/elasticsearch
+ES_PATH_CONF=/etc/elasticsearch
+ES_CONFIG=/etc/elasticsearch/elasticsearch.yml
+ES_INCLUDE=/usr/share/java/elasticsearch/bin/elasticsearch.in.sh
+
+hostname=$(python -c 'import boto.utils; print boto.utils.get_instance_metadata()["public-hostname"]')
+zone=$(python -c 'import boto.utils; print boto.utils.get_instance_metadata()["placement"]["availability-zone"]')
+
+if [ "us-west-2" = "${zone}" ]; then
+    end=$((${#zone} - 1))
+else
+    end=$((${#zone} - 3))
+fi
+export ES_REGION=`expr substr $zone 1 $end`
+
+export ES_NAME=$(python -c 'import boto.utils; import json; print json.loads(boto.utils.get_instance_userdata())["name"]')
+export ES_GROUPS=$(python -c 'import boto.utils; import json; print json.loads(boto.utils.get_instance_userdata())["groups"]')
+export ES_BUCKET=$(python -c 'import boto.utils; import json; print json.loads(boto.utils.get_instance_userdata())["bucket"]')
+export ES_ACCESS_KEY=$(python -c 'import boto.utils; import json; print json.loads(boto.utils.get_instance_userdata())["credentials"]["access_key_id"]')
+export ES_SECRET_KEY=$(python -c 'import boto.utils; import json; print json.loads(boto.utils.get_instance_userdata())["credentials"]["secret_access_key"]')
+
+# we need some more room to work
+ulimit -l unlimited
+ulimit -n 65536
+
+# they advice to use half the memory (need to test)
+# ES_HEAP_SIZE=256m
+#ES_HEAP_SIZE=1922424k
+export ES_MIN_MEM=$(($(/usr/bin/awk '/MemTotal/{print $2}' /proc/meminfo) / 2))k
+export ES_MAX_MEM=$(($(/usr/bin/awk '/MemTotal/{print $2}' /proc/meminfo) / 2))k
+
+# overriding some data/work locations
+datadir=/media/ephemeral0/elasticsearch
+mkdir -p ${datadir}
+chown -R elasticsearch.elasticsearch ${datadir}
+export ES_PATH_DATA=${datadir}/${ES_NAME}/data
+export ES_PATH_WORK=${datadir}/${ES_NAME}/work
