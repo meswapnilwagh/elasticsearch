@@ -8,7 +8,7 @@ import requests
 from time import gmtime,strftime,time
 
 # this we'll have to get from userdata
-cluster = "elasticsearch.logstash.adgoji.com"
+cluster = "your.elasticsearch.cluster.com"
 
 indexes = "http://{0}:9200/_stats?level=shards"
 delete_all = "http://{0}:9200/"
